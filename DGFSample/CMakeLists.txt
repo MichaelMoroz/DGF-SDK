@@ -82,28 +82,26 @@ target_link_libraries( ${APP_NAME} PUBLIC
     d3d12 
     d3dcompiler 
     dxcompiler
-) 
-
+)
 
 add_custom_command(TARGET ${APP_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-    ${CMAKE_BINARY_DIR}/bin/dxcompiler.dll
-    ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/      
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_BINARY_DIR}/bin/dxcompiler.dll
+        ${CMAKE_CURRENT_BINARY_DIR}/
 
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-    ${CMAKE_BINARY_DIR}/bin/dxil.dll
-    ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/
-    
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/D3D12/ 
-    
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-    ${CMAKE_BINARY_DIR}/bin/D3D12Core.dll
-    ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/D3D12/ 
-    
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-    ${CMAKE_BINARY_DIR}/bin/d3d12SDKLayers.dll
-    ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/D3D12/
-    
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_BINARY_DIR}/bin/dxil.dll
+        ${CMAKE_CURRENT_BINARY_DIR}/
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/D3D12/
+
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_BINARY_DIR}/bin/D3D12Core.dll
+        ${CMAKE_CURRENT_BINARY_DIR}/D3D12/
+
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_BINARY_DIR}/bin/d3d12SDKLayers.dll
+        ${CMAKE_CURRENT_BINARY_DIR}/D3D12/
 )
 
     
