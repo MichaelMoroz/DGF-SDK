@@ -104,20 +104,18 @@ add_custom_command(TARGET ${APP_NAME} POST_BUILD
         ${CMAKE_CURRENT_BINARY_DIR}/D3D12/
 )
 
-    
-add_custom_command(TARGET ${APP_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/shaders/" "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/shaders/"
+# Define a custom target that always cleans and copies the shaders directory
+add_custom_target(CopyShaders ALL
+        COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/shaders"
+        COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/shaders"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/shaders"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/shaders"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/shaders" "${CMAKE_CURRENT_BINARY_DIR}/shaders"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/shaders" "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/shaders"
+        COMMENT "Cleaning and copying shader directory..."
 )
 
-    
-foreach(SHADER ${SHADERS})
-    add_custom_command(
-      TARGET ${APP_NAME}
-      POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SHADER} "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/shaders/"
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SHADER} "${CMAKE_CURRENT_BINARY_DIR}/shaders/"
-      COMMENT "Copying ${SHADER}"
-    )
-endforeach()
+# Make sure your main executable depends on this target so that it runs every build
+add_dependencies(${APP_NAME} CopyShaders)
 
 set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD 20)
